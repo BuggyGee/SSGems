@@ -1,0 +1,13 @@
+name: SlipStreamGems
+version: 1.0.0
+main: dev.slipstream.network.slipstreamgems.Main
+description: This is SlipStream Gems
+api-version: 1.16
+
+commands:
+  points:
+    description: main points command
+  gems:
+    description: returns the senders points
+  store:
+    description: Gem Store
