@@ -67,7 +67,6 @@ public class GemStore {
 	public static Inventory afkConfirm;
 	public static Inventory skullConfirm;
 	public static Inventory hatConfirm;
-	public static Inventory feedConfirm;
 	public static String confirmRanger;
 	public static String confirmAmbulance;
 	public static String confirmBlueCar;
@@ -92,7 +91,7 @@ public class GemStore {
 	public static String confirmAFK;
 	public static String confirmSkull;
 	public static String confirmHat;
-	public static String confirmFeed;
+
 	
 	public static int inv_rows3 = inv_boxes * 1;
 
@@ -1911,8 +1910,7 @@ public class GemStore {
 				1, 4, "&e/skull", "&c25000 Gems");
 		utils.createItem(inv5, "leather_helmet", 1, 5, "&b/hat", "&c20000 Gems");
 		utils.createItem(inv5, "clock", 1, 6, "&bAFK Bypass", "&c20000 Gems");
-		utils.createItem(inv5, "cooked_beef", 1, 7, "&b/feed", "&c20000 Gems");
-		utils.createItem(inv5, "red_stained_glass_pane", 1, 9, "&4BACK", "");
+		utils.createItem(inv5, "red_stained_glass_pane", 1, 7, "&4BACK", "");
 
 		toReturn.setContents(inv5.getContents());
 		return toReturn;
@@ -1970,6 +1968,9 @@ public class GemStore {
 
 			String flycmd = "lp user %player% permission set essentials.fly";
 			flycmd = flycmd.replace("%player%", p.getName());
+			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), flycmd);
+			String flycmd3 = "lp user %player% permission set sf.fly";
+			flycmd = flycm3.replace("%player%", p.getName());
 			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), flycmd);
 			String flycmd2 = "lp user %player% permission set essentials.fly.safelogin";
 			flycmd2 = flycmd2.replace("%player%", p.getName());
@@ -2322,68 +2323,6 @@ public class GemStore {
 
 	}
 
-	// FEED COMMAND
 
-	// PERMISSION CHECK
-	public static void feedConfirm(Player p, int slot, ItemStack feedConfirm, Inventory inv) {
-
-		if (feedConfirm.getItemMeta().getDisplayName().equalsIgnoreCase(utils.chat("&b/feed"))
-				&& !p.hasPermission("essentials.feed")) {
-
-			p.closeInventory();
-			p.openInventory(GemStore.feedConfirm(p));
-
-		} else if (feedConfirm.getItemMeta().getDisplayName().equalsIgnoreCase(utils.chat("&b/feed"))
-				&& p.hasPermission("essentials.feed")) {
-			p.sendMessage(utils.chat("&aYou already have /feed command!"));
-		}
-
-	}
-
-	// GUI
-	public static Inventory feedConfirm(Player p) {
-		Inventory toReturn = Bukkit.createInventory(null, inv_rows3, confirmFeed);
-
-		utils.createItem(feedConfirm, "lime_stained_glass_pane", 1, 3, "&aCONFIRM PURCHASE", "&c&l5000 Gems");
-		utils.createItem(feedConfirm, "red_stained_glass_pane", 1, 7, "&4DENY PURCHASE", "&eExit Transaction");
-		UUID uuid = p.getUniqueId();
-		int gems = SQLGetter.getGems(uuid);
-		String loreGems = "&fYou have &e" + gems + " &fGems available";
-
-		utils.getPlayerHead(feedConfirm, p, 1, 5, "&e " + p.getName(), "", loreGems);
-
-		toReturn.setContents(feedConfirm.getContents());
-		return toReturn;
-	}
-
-	public static void feedPurchase(Player p, int slot, ItemStack feedPurchase, Inventory inv) {
-		UUID uuid = p.getUniqueId();
-		if (feedPurchase.getItemMeta().getDisplayName().equalsIgnoreCase(utils.chat("&aCONFIRM PURCHASE"))
-				&& SQLGetter.getGems(uuid) >= 5000) {
-
-			String feedcmd = "lp user %player% permission set essentials.feed";
-			feedcmd = feedcmd.replace("%player%", p.getName());
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), feedcmd);
-
-			int gems = SQLGetter.getGems(uuid);
-			int amount = (gems - 5000);
-			SQLGetter.updateGems(uuid, amount);
-
-			p.sendMessage(utils.chat("&a5000 Gems have been removed from your account"));
-
-			p.closeInventory();
-		} else if (feedPurchase.getItemMeta().getDisplayName().equalsIgnoreCase(utils.chat("&aCONFIRM PURCHASE"))
-				&& SQLGetter.getGems(uuid) < 5000) {
-			p.closeInventory();
-			int gems = (5000 - SQLGetter.getGems(uuid));
-			p.sendMessage(utils.chat("&cYou need &e" + gems + " &cmore Gems"));
-		}
-
-		else if (feedPurchase.getItemMeta().getDisplayName().equalsIgnoreCase(utils.chat("&4DENY PURCHASE"))) {
-			p.closeInventory();
-			p.openInventory(GemStore.GlobalPerksGui(p));
-		}
-
-	}
 
 }
