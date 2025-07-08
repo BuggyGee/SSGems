@@ -30,7 +30,7 @@ public class SQLGetter {
 
 	public boolean exists(UUID uuid) {
 		try {
-			PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT * FROM SSGems WHERE UUID=?");
+			PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("");
 			ps.setString(1, uuid.toString());
 
 			ResultSet results = ps.executeQuery();
@@ -48,13 +48,13 @@ public class SQLGetter {
 
 	public void createPlayer(final UUID uuid, Player player) {
 		try {
-			PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT * FROM SSGems WHERE UUID=?");
+			PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("");
 			ps.setString(1, uuid.toString());
 			ResultSet results = ps.executeQuery();
 			results.next();
 			if (exists(uuid) != true) {
 				PreparedStatement insert = plugin.SQL.getConnection()
-						.prepareStatement("INSERT INTO SSGems (NAME,UUID,GEMS) VALUE (?,?,?)");
+						.prepareStatement("");
 				insert.setString(1, player.getName());
 				insert.setString(2, uuid.toString());
 				insert.setInt(3, 0);
@@ -73,7 +73,7 @@ public class SQLGetter {
 	public static void updateGems(UUID uuid, int amount) {
 
 		try {
-			PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE SSgems SET GEMS=? WHERE UUID=?");
+			PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("");
 			ps.setInt(1, amount);
 			ps.setString(2, uuid.toString());
 			ps.executeUpdate();
